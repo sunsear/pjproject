@@ -190,6 +190,27 @@ using namespace pj;
 }
 #endif
 
+
+#ifdef SWIGPYTHON
+  %typemap(in) (char *data, size_t datasize) {
+    Py_ssize_t len;
+    PyBytes_AsStringAndSize($input, &$1, &len);
+    $2 = (size_t)len;
+  }
+
+  %typemap(in, numinputs=0) (char **data, size_t *datasize)(char *temp, size_t tempsize) {
+    $1 = &temp;
+    $2 = &tempsize;
+  }
+
+  %typemap(argout) (char **data, size_t *datasize) {
+    if(*$1) {
+      $result = PyBytes_FromStringAndSize(*$1, *$2);
+      free(*$1);
+    }
+  }
+#endif
+
 %include "pjsua2/media.hpp"
 %include "pjsua2/presence.hpp"
 %include "pjsua2/account.hpp"
