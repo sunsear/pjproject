@@ -480,22 +480,22 @@ AudioMediaCapture::~AudioMediaCapture()
     }
 }
 
-void AudioMediaCapture::createMediaCapture(pjsua_call_id id)
+void AudioMediaCapture::createMediaCapture(
+    unsigned clock_rate,
+    unsigned channel_count,
+    unsigned samples_per_frame,
+    unsigned bits_per_sample
+)
 {
-    pjsua_call_info ci;
-    pjsua_call_get_info(id, &ci);
-
-    pjsua_conf_port_info cpi;
-    pjsua_conf_get_port_info(ci.conf_slot, &cpi);
-    frame_size = cpi.bits_per_sample*cpi.samples_per_frame*cpi.channel_count/8;
+    frame_size = bits_per_sample*samples_per_frame*channel_count/8;
     frame_buffer = pj_pool_zalloc(pool, frame_size);
     pjmedia_mem_capture_create( pool, //Pool
                           frame_buffer, //Buffer
                           frame_size, //Buffer Size
-                          cpi.clock_rate,
-                          cpi.channel_count,
-                          cpi.samples_per_frame,
-                          cpi.bits_per_sample,
+                          clock_rate,
+                          channel_count,
+                          samples_per_frame,
+                          bits_per_sample,
                           0, //Options
                           &capture_port); //The return port}
     pjmedia_mem_capture_set_eof_cb2(capture_port, this, AudioMediaCapture::processFrames);

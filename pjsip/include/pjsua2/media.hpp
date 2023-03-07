@@ -662,7 +662,12 @@ class AudioMediaCapture : public AudioMedia {
 public:
     AudioMediaCapture();
     ~AudioMediaCapture();
-    void createMediaCapture(pjsua_call_id);
+    void createMediaCapture(
+        unsigned clock_rate,
+        unsigned channel_count,
+        unsigned samples_per_frame,
+        unsigned bits_per_sample
+    );
     void getFrames(char **data, size_t *datasize);
     string getFramesAsString();
     // static pj_status_t processFrames(pjmedia_port *, void *);
