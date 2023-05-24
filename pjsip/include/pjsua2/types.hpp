@@ -163,7 +163,6 @@ struct Error
 #   define PJSUA2_RAISE_ERROR3(status,op,txt)   \
         do { \
             Error err_ = Error(status, op, txt, __FILE__, __LINE__); \
-            PJ_LOG(1,(THIS_FILE, "%s", err_.info().c_str())); \
             throw err_; \
         } while (0)
 
@@ -180,7 +179,6 @@ struct Error
 #   define PJSUA2_RAISE_ERROR3(status,op,txt)   \
         do { \
             Error err_ = Error(status, op, txt, string(), 0); \
-            PJ_LOG(1,(THIS_FILE, "%s", err_.info().c_str())); \
             throw err_; \
         } while (0)
 
